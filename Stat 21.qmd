@@ -1,0 +1,112 @@
+---
+title: "Stat 21 insights"
+author: "Samuel Amoh"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#| label: load packages and setting default chunk options
+knitr::opts_chunk$set(include = FALSE)
+library(tibble)
+library(ggplot2)
+library(dplyr)
+library(purrr)
+```
+
+```{r}
+#| echo: true
+#| label: Loading Data
+Goods <- tibble::tibble(
+
+Item = c(rep("gizmo", 100000), rep("gadget", 1000)),
+
+Price_2022 = c(rep(10, 100000), rep(1000, 1000)),
+
+Price_2023 = c(rep(8, 100000), rep(1200, 1000))
+
+)
+
+```
+
+```{r}
+#| echo: true
+# Argument Showing that price increased
+
+Goods %>%
+
+group_by(Item) %>%
+
+summarise(Quantity = n(),
+
+Price_last = mean(Price_2022),
+
+Price_now = mean(Price_2023)
+
+) %>%
+
+summarise(Avg_price_last = mean(Price_last),
+
+Avg_price_now = mean(Price_now)
+
+)
+
+```
+
+```{r}
+
+# Show that price did not change
+
+Goods %>%
+
+group_by(Item) %>%
+
+summarise(Quantity = n(),
+
+Price_last = mean(Price_2022),
+
+Price_now = mean(Price_2023)
+
+) %>%
+
+mutate(Weighted_Avg_Price_Last = (Quantity * Price_last)/ sum(Quantity),
+
+Weighted_Avg_Price_Now = (Quantity * Price_now)/ sum(Quantity))
+
+```
+
+```{r}
+
+Goods %>%
+
+group_by(Item) %>%
+
+summarise(
+
+Mode_last_year = n(),
+
+Mode_this_year = n()
+
+)
+```
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
